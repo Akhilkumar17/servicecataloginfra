@@ -1,0 +1,144 @@
+1. **Resource**: A CloudFormation template (for EC2 and S3).
+2. **Product**: A Service Catalog product that uses the CloudFormation template.
+3. **Portfolio**: A Service Catalog portfolio to group the product.
+
+Here’s the complete Terraform configuration:
+
+---
+
+### **Terraform Configuration**
+
+```hcl
+provider "aws" {
+  region = "us-east-1"  # Replace with your region
+}
+
+# Step 1: Upload the CloudFormation template to S3
+resource "aws_s3_bucket" "template_bucket" {
+  bucket = "my-service-catalog-templates-12345"  # Replace with a unique bucket name
+}
+
+resource "aws_s3_object" "template" {
+  bucket = aws_s3_bucket.template_bucket.bucket
+  key    = "my-template.yaml"  # destination 
+  source = "my-template.yaml"  # Path to your CloudFormation template
+}
+
+# Step 2: Create the Service Catalog product
+resource "aws_servicecatalog_product" "example" {
+  name             = "MyProduct"
+  owner            = "MyTeam"
+  description      = "Product for 2 EC2 instances and 1 S3 bucket"
+  type             = "CLOUD_FORMATION_TEMPLATE"
+
+  provisioning_artifact_parameters {
+    name        = "v1"
+    description = "Initial version"
+    template_url = "https://${aws_s3_bucket.template_bucket.bucket}.s3.amazonaws.com/${aws_s3_object.template.key}"
+    type        = "CLOUD_FORMATION_TEMPLATE"
+  }
+}
+
+# Step 3: Create the Service Catalog portfolio
+resource "aws_servicecatalog_portfolio" "example" {
+  name          = "MyPortfolio"
+  description   = "Portfolio for MyTeam's products"
+  provider_name = "MyTeam"
+}
+
+# Step 4: Associate the product with the portfolio
+resource "aws_servicecatalog_product_portfolio_association" "example" {
+  product_id   = aws_servicecatalog_product.example.id
+  portfolio_id = aws_servicecatalog_portfolio.example.id
+}
+
+# Step 5: Grant access to a user or role
+resource "aws_servicecatalog_principal_portfolio_association" "example" {
+  portfolio_id  = aws_servicecatalog_portfolio.example.id
+  principal_arn = "arn:aws:iam::123456789012:user/MyUser"  # Replace with your user/role ARN
+}
+
+# Output the Product ID and Portfolio ID
+output "product_id" {
+  value = aws_servicecatalog_product.example.id
+}
+
+output "portfolio_id" {
+  value = aws_servicecatalog_portfolio.example.id
+}
+```
+
+---
+
+### **CloudFormation Template (`my-template.yaml`)**
+Save this file in the same directory as your Terraform configuration.
+
+```yaml
+Resources:
+  MyEC2Instance1:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0c55b159cbfafe1f0  # Replace with your AMI ID
+      InstanceType: t2.micro
+      Tags:
+        - Key: Name
+          Value: MyEC2Instance1
+
+  MyEC2Instance2:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0c55b159cbfafe1f0  # Replace with your AMI ID
+      InstanceType: t2.micro
+      Tags:
+        - Key: Name
+          Value: MyEC2Instance2
+
+  MyS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: my-unique-bucket-name-12345  # Replace with a unique bucket name
+```
+
+---
+
+### **Steps to Deploy**
+
+1. **Save the Files**:
+   - Save the Terraform configuration as `main.tf`.
+   - Save the CloudFormation template as `my-template.yaml`.
+
+2. **Initialize Terraform**:
+   ```bash
+   terraform init
+   ```
+
+3. **Apply the Configuration**:
+   ```bash
+   terraform apply
+   ```
+
+   Terraform will:
+   - Create an S3 bucket and upload the CloudFormation template.
+   - Create a Service Catalog product.
+   - Create a Service Catalog portfolio.
+   - Associate the product with the portfolio.
+   - Grant access to the specified user or role.
+
+4. **Verify the Output**:
+   - Terraform will output the **Product ID** and **Portfolio ID**.
+
+5. **Launch the Product**:
+   - Go to the **AWS Service Catalog** console.
+   - Find the portfolio (`MyPortfolio`) and product (`MyProduct`).
+   - Launch the product to provision the resources (2 EC2 instances and 1 S3 bucket).
+
+---
+
+### **Summary**
+This Terraform configuration:
+1. Creates a **CloudFormation template** for 2 EC2 instances and 1 S3 bucket.
+2. Creates a **Service Catalog product** using the template.
+3. Creates a **Service Catalog portfolio** and associates the product with it.
+4. Grants access to a user or role.
+
+You now have a fully automated setup for creating and managing a Service Catalog product and portfolio! Let me know if you need further assistance. 😊
