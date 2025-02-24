@@ -1,0 +1,44 @@
+**AWS Service Catalog** is a service that allows organizations to create and manage catalogs of approved IT services that are available for use on AWS. These IT services can include everything from virtual machine images, servers, software, and databases to complete multi-tier application architectures. AWS Service Catalog enables organizations to centrally manage commonly deployed IT services, and helps achieve consistent governance and meet compliance requirements, while enabling users to quickly deploy only the approved IT services they need.
+
+### Key Features of AWS Service Catalog:
+
+1. **Portfolio Management**:
+   - Create and manage portfolios of AWS resources (e.g., EC2 instances, RDS databases, S3 buckets, etc.).
+   - Organize products into portfolios for different teams, departments, or projects.
+
+2. **Product Management**:
+   - Define products (e.g., templates, configurations, or architectures) using AWS CloudFormation templates.
+   - Products can include single resources or complex multi-tier applications.
+
+3. **Access Control**:
+   - Control who has access to specific products and portfolios using AWS Identity and Access Management (IAM).
+   - Grant permissions to end-users to provision products while maintaining governance.
+
+4. **Versioning**:
+   - Manage different versions of products and update them as needed.
+   - Ensure users are deploying the latest approved configurations.
+
+5. **Self-Service Provisioning**:
+   - End-users can browse the catalog and launch approved products without needing deep technical expertise.
+   - Simplifies the process of deploying AWS resources while adhering to organizational policies.
+
+6. **Governance and Compliance**:
+   - Ensure that all deployed resources comply with organizational standards.
+   - Enforce tagging, security settings, and other policies.
+
+7. **Cost Management**:
+   - Track and manage costs associated with deployed resources.
+   - Ensure users are only deploying resources within budget constraints.
+
+### How It Works:
+- **Administrators** create and manage portfolios and products using AWS Service Catalog.
+- **End-users** (e.g., developers, engineers) access the catalog through the AWS Management Console or APIs to provision approved resources.
+- Administrators can set constraints (e.g., allowed regions, instance types) to ensure compliance with organizational policies.
+
+### Use Cases:
+- **Centralized IT Governance**: Ensure that all teams use approved configurations and templates.
+- **Self-Service IT**: Empower teams to deploy resources quickly without waiting for IT approval.
+- **Compliance and Security**: Enforce security best practices and compliance requirements across all deployments.
+- **Cost Control**: Limit resource provisioning to approved configurations to avoid unexpected costs.
+
+In summary, AWS Service Catalog is a powerful tool for organizations that want to provide their teams with easy access to approved AWS resources while maintaining control over governance, compliance, and costs.
