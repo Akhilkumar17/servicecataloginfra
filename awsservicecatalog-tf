@@ -206,5 +206,3 @@ principal_arn                 = "arn:aws:iam::123456789012:user/MyUser"  # Repla
 - You prepare and test the Terraform configurations.
 - Push the configurations to a Git repository.
 - The client deploys the **product** and **portfolio** into their AWS account using Terraform.
-
-This approach ensures that **Terraform is the provisioning engine** and avoids the need for CloudFormation templates. Let me know if you need further clarification! 😊
